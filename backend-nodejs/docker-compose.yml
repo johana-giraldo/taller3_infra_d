@@ -1,0 +1,27 @@
+version: '3.4'
+
+services: 
+    mongodb:
+        image: mongo
+        restart: always
+        environment: 
+            MONGO_INITDB_ROOT_PASSWORD: pass
+            MONGO_INITDB_ROOT_USERNAME: user
+        ports: 
+            - 50000:27017
+    backend:
+        image: dayramina/backend_conduit:1.0
+        environment:
+            SECRET: pass
+            NODE_ENV: production
+            MONGODB_URI: mongodb://user:pass@mongodb:27017/admin
+            PORT: 3000
+        ports:
+            - 3002:3000
+        depends_on:
+            - mongodb
+
+    frontend:
+        image: dayramina/frontend_conduit:1.0
+        ports:
+            - 5000:3000
